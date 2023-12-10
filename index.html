@@ -4,7 +4,42 @@
     <meta charset="UTF-8">
     <title>Happy Drink</title>
     <script src="https://unpkg.com/alpinejs" defer></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
     <style>
+        /* Fond de la page */
+        body {
+            background-color: #f0f8ff; /* Bleu très pâle */
+        }
+
+        /* Carte (fiche) */
+        .card {
+            border: 1px solid #d3d3d3; /* Liseret gris clair */
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Ombre projetée */
+            max-width: 800px; /* Largeur maximale de la fiche */
+            max-height: 90vh; /* Hauteur maximale de la fiche */
+            overflow: hidden; /* Cache le débordement de contenu */
+        }
+
+        .col-md-6 {
+            max-height: 90vh; /* Hauteur maximale du conteneur de l'image */
+            overflow: hidden; /* Cache le débordement de contenu */
+        }
+
+        /* Image */
+        .img-fluid {
+            height: 100%; /* Hauteur complète */
+            object-fit: cover; /* Ajustement de l'image */
+        }
+
+        /* Icônes Bootstrap */
+        .bi-envelope-fill,
+        .bi-telephone-fill {
+            margin-right: 5px; /* Espacement après l'icône */
+        }
+
     </style>
 </head>
 <body>
@@ -13,15 +48,34 @@
 
 <div x-data="airtableDataFetcher()" x-init="fetchData()">
     <div x-show="record">
-        <button @click="nextRecord">Voir l'enregistrement suivant</button>
-        <h2 x-text="record.fields['Identité'] ? record.fields['Identité'] : 'Non disponible'"></h2>
-        <p x-show="record.fields['e-mail']">Email: <span x-text="record.fields['e-mail']"></span></p>
-        <p x-show="record.fields['Téléphone']">Téléphone: <span x-text="record.fields['Téléphone']"></span></p>
-        <p x-show="record.fields['offre']">Offre: <span x-text="record.fields['offre']"></span></p>
-        <p x-show="record.fields['recherche']">Recherche: <span x-text="record.fields['recherche']"></span></p>
-        <img x-show="record.fields['Photo'] && record.fields['Photo'].length > 0" x-bind:src="record.fields['Photo'][0].thumbnails.large.url" alt="Image">
+
+        <div class="d-flex justify-content-center align-items-center" style="height: 100vh; background-color: #f0f8ff;">
+            <div class="card shadow" style="width: 50%; border: 1px solid #d3d3d3;">
+                <div class="row g-0">
+                    <div class="col-md-6">
+                        <img  x-show="record.fields['Photo'] && record.fields['Photo'].length > 0" x-bind:src="record.fields['Photo'][0].url" class="img-fluid" alt="Image" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <h5 class="card-title mb-5" x-text="record.fields['Identité']"></h5>
+                            <p x-show="record.fields['e-mail']" class="card-text">
+                                <i class="bi bi-envelope-fill"></i> <span x-text="record.fields['e-mail']"></span>
+                            </p>
+                            <p x-show="record.fields['Téléphone']"  class="card-text">
+                                <i class="bi bi-telephone-fill"></i> <span x-text="record.fields['Téléphone']"></span>
+                            </p>
+                            <p x-show="record.fields['offre']" class="mt-5"><b>Offre</b>:<br/><span x-text="record.fields['offre']"></span></p>
+                            <p x-show="record.fields['recherche']" class="mt-5"><b>Recherche</b>:<br/><span x-text="record.fields['recherche']"></span></p>
+                        </div>
+                        <button @click="nextRecord" class="btn btn-outline-light btn-sm float-end">></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
+
 
 <script>
 function airtableDataFetcher() {
