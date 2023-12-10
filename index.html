@@ -46,9 +46,30 @@
 
 
 
-<div x-data="airtableDataFetcher()" x-init="fetchData()">
-    <div x-show="record">
 
+
+<div x-data="airtableDataFetcher()" x-init="fetchData()">
+      
+
+    <div class="modal fade" id="token-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Airtable access token</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" x-model="tempToken" placeholder="Saisissez votre Access Token">
+                    <button @click="setToken" class="btn btn-primary">GO</button>
+                </div>
+            </div>
+        </div>
+    </div>
+      
+      
+
+    <div x-show="record">
+    
         <div class="d-flex justify-content-center align-items-center" style="height: 100vh; background-color: #f0f8ff;">
             <div class="card shadow" style="width: 50%; border: 1px solid #d3d3d3;">
                 <div class="row g-0">
@@ -74,29 +95,43 @@
         </div>
 
     </div>
+
 </div>
 
 
 <script>
 function airtableDataFetcher() {
-    const accessToken = 'patDd1HSG2FSoFbIX.c5076a97424e8eb40229d7bc322bc2b7837082ef328fa1582a4982a0b9efa75a';
+
     return {
+        tokenModal: null,
+        tempToken: '',
+        token: '',
         records: [],
         currentRecordIndex: 0,
         record: null,
         displayTimer: null,
         refreshTimer: null,
 
+
         init() {
+            this.tokenModal = new bootstrap.Modal('#token-modal')
+            this.tokenModal.show();
+        },
+
+        setToken() {
+            this.tokenModal.hide();
+            this.token = this.tempToken;
             this.fetchData();
             this.setDisplayTimer();
             this.setRefreshTimer();
         },
 
         fetchData() {
+            if (!this.token) return;
+
             fetch('https://api.airtable.com/v0/appF1asllEQjuOvcm/tblM7Yv7cNRGAOc1H', {
                     headers: {
-                        'Authorization': `Bearer ${accessToken}`
+                        'Authorization': `Bearer ${this.token}`
                     }
                 })
                 .then(response => response.json())
