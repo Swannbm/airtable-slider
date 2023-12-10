@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Happy Drink</title>
+    <script src="https://unpkg.com/alpinejs" defer></script>
+    <style>
+    </style>
+</head>
+<body>
+
+
+
+<div x-data="airtableDataFetcher()" x-init="fetchData()">
+    <div x-show="record">
+        <button @click="nextRecord">Voir l'enregistrement suivant</button>
+        <h2 x-text="record.fields['Identité'] ? record.fields['Identité'] : 'Non disponible'"></h2>
+        <p x-show="record.fields['e-mail']">Email: <span x-text="record.fields['e-mail']"></span></p>
+        <p x-show="record.fields['Téléphone']">Téléphone: <span x-text="record.fields['Téléphone']"></span></p>
+        <p x-show="record.fields['offre']">Offre: <span x-text="record.fields['offre']"></span></p>
+        <p x-show="record.fields['recherche']">Recherche: <span x-text="record.fields['recherche']"></span></p>
+        <img x-show="record.fields['Photo'] && record.fields['Photo'].length > 0" x-bind:src="record.fields['Photo'][0].thumbnails.large.url" alt="Image">
+    </div>
+</div>
+
+<script>
+function airtableDataFetcher() {
+    const accessToken = 'patDd1HSG2FSoFbIX.c5076a97424e8eb40229d7bc322bc2b7837082ef328fa1582a4982a0b9efa75a';
+    return {
+        records: [],
+        currentRecordIndex: 0,
+        record: null,
+        displayTimer: null,
+        refreshTimer: null,
+
+        init() {
+            this.fetchData();
+            this.setDisplayTimer();
+            this.setRefreshTimer();
+        },
+
+        fetchData() {
+            fetch('https://api.airtable.com/v0/appF1asllEQjuOvcm/tblM7Yv7cNRGAOc1H', {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    this.records = data.records;
+                    this.updateRecord();
+                });
+        },
+
+        updateRecord() {
+            if (this.records.length > 0) {
+                this.record = this.records[this.currentRecordIndex];
+            }
+        },
+
+        setDisplayTimer() {
+            clearInterval(this.displayTimer);
+            this.displayTimer = setInterval(() => this.nextRecord(), 5 * 1000);
+        },
+
+        nextRecord() {
+            this.currentRecordIndex = (this.currentRecordIndex + 1) % this.records.length;
+            this.updateRecord();
+        },
+
+        setRefreshTimer() {
+            clearInterval(this.refreshTimer);
+            this.refreshTimer = setInterval(() => this.fetchData(), 30 * 1000);
+        }
+    }
+}
+</script>
+
+</body>
+</html>
