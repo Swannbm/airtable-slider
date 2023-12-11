@@ -149,7 +149,7 @@ function airtableDataFetcher() {
 
         setDisplayTimer() {
             clearInterval(this.displayTimer);
-            this.displayTimer = setInterval(() => this.nextRecord(), 5 * 1000);
+            this.displayTimer = setInterval(() => this.nextRecord(), 30 * 1000);
         },
 
         nextRecord() {
