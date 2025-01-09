@@ -104,30 +104,30 @@ function airtableDataFetcher() {
                     >
                 </template>
             </div>
-            <div class="basis-1/2 m-6 text-2xl">
-                <h1 class="font-extrabold" x-text="record.fields['name']"></h1>
-                <p x-text="record.fields['bio']" class="mt-5"></p>
+            <div class="basis-1/2 m-6">
+                <h1 class="font-extrabold text-6xl" x-text="record.fields['name']"></h1>
+                <p x-text="record.fields['bio']" class="mt-5 text-4xl"></p>
 
                 <!--- EMAIL et PHONE -->
                 <div x-show="record.fields['email']" class="flex items-center mt-5">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 block">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 block">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 1 0-2.636 6.364M16.5 12V8.25" />
                     </svg>
-                    <div x-text="record.fields['email']" class="ms-1"></div>
+                    <div x-text="record.fields['email']" class="ms-1 text-4xl"></div>
                 </div>
                 <div x-show="record.fields['phone']"  class="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
                     </svg>
-                    <div x-text="record.fields['phone']" class="ms-1"></div>
+                    <div x-text="record.fields['phone']" class="ms-1 text-4xl"></div>
                 </div>
                 
                 <!--- Présence -->
                 <div x-show="record.fields['days']"  class="flex items-center mt-5">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 block">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 block">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 2.994v2.25m10.5-2.25v2.25m-14.252 13.5V7.491a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v11.251m-18 0a2.25 2.25 0 0 0 2.25 2.25h13.5a2.25 2.25 0 0 0 2.25-2.25m-18 0v-7.5a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v7.5m-6.75-6h2.25m-9 2.25h4.5m.002-2.25h.005v.006H12v-.006Zm-.001 4.5h.006v.006h-.006v-.005Zm-2.25.001h.005v.006H9.75v-.006Zm-2.25 0h.005v.005h-.006v-.005Zm6.75-2.247h.005v.005h-.005v-.005Zm0 2.247h.006v.006h-.006v-.006Zm2.25-2.248h.006V15H16.5v-.005Z" />
                     </svg>
-                    <div x-text="record.fields['days']" class="ms-1"></div>
+                    <div x-text="record.fields['days']" class="ms-1 text-4xl"></div>
                 </div>
                   
                 <!-- suivant -->
