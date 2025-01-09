@@ -106,7 +106,7 @@ function airtableDataFetcher() {
             </div>
             <div class="basis-1/2 m-6">
                 <h1 class="font-extrabold text-6xl" x-text="record.fields['name']"></h1>
-                <p x-text="record.fields['bio']" class="mt-5 text-4xl"></p>
+                <p x-html="record.fields['bio']" class="mt-5 text-4xl"></p>
 
                 <!--- EMAIL et PHONE -->
                 <div x-show="record.fields['email']" class="flex items-center mt-5">
