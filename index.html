@@ -4,132 +4,40 @@
     <meta charset="UTF-8">
     <title>Happy Drink</title>
     <script src="https://unpkg.com/alpinejs" defer></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-
-    <style>
-        /* Fond de la page */
-        body {
-            background-color: #f0f8ff; /* Bleu très pâle */
-        }
-
-        /* Carte (fiche) */
-        .card {
-            border: 1px solid #d3d3d3; /* Liseret gris clair */
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Ombre projetée */
-            max-width: 800px; /* Largeur maximale de la fiche */
-            max-height: 90vh; /* Hauteur maximale de la fiche */
-            overflow: hidden; /* Cache le débordement de contenu */
-        }
-
-        .col-md-6 {
-            max-height: 90vh; /* Hauteur maximale du conteneur de l'image */
-            overflow: hidden; /* Cache le débordement de contenu */
-        }
-
-        /* Image */
-        .img-fluid {
-            height: 100%; /* Hauteur complète */
-            object-fit: cover; /* Ajustement de l'image */
-        }
-
-        /* Icônes Bootstrap */
-        .bi-envelope-fill,
-        .bi-telephone-fill {
-            margin-right: 5px; /* Espacement après l'icône */
-        }
-
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-
-
-
-
-
-<div x-data="airtableDataFetcher()" x-init="fetchData()">
-      
-
-    <div class="modal fade" id="token-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Airtable access token</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="text" x-model="tempToken" placeholder="Saisissez votre Access Token">
-                    <button @click="setToken" class="btn btn-primary">GO</button>
-                </div>
-            </div>
-        </div>
-    </div>
-      
-      
-
-    <div x-show="record">
-    
-        <div class="d-flex justify-content-center align-items-center" style="height: 100vh; background-color: #f0f8ff;">
-            <div class="card shadow" style="width: 50%; border: 1px solid #d3d3d3;">
-                <div class="row g-0">
-                    <div class="col-md-6">
-                        <img  x-show="record.fields['Photo'] && record.fields['Photo'].length > 0" x-bind:src="record.fields['Photo'][0].url" class="img-fluid" alt="Image" style="width: 100%; height: 100%; object-fit: cover;">
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card-body">
-                            <h5 class="card-title mb-5" x-text="record.fields['Identité']"></h5>
-                            <p x-show="record.fields['e-mail']" class="card-text">
-                                <i class="bi bi-envelope-fill"></i> <span x-text="record.fields['e-mail']"></span>
-                            </p>
-                            <p x-show="record.fields['Téléphone']"  class="card-text">
-                                <i class="bi bi-telephone-fill"></i> <span x-text="record.fields['Téléphone']"></span>
-                            </p>
-                            <p x-show="record.fields['offre']" class="mt-5"><b>Offre</b>:<br/><span x-text="record.fields['offre']"></span></p>
-                            <p x-show="record.fields['recherche']" class="mt-5"><b>Recherche</b>:<br/><span x-text="record.fields['recherche']"></span></p>
-                        </div>
-                        <button @click="nextRecord" class="btn btn-outline-light btn-sm float-end">></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-</div>
 
 
 <script>
 function airtableDataFetcher() {
 
     return {
-        tokenModal: null,
-        tempToken: '',
-        token: '',
+        tempToken: 'pat8LIiAm2zYF1sGD.72d982b2971b9ab0e61b65d49866a8f51902c84876d81061a80f6efe317e1a9f',
+        token: null,
+        baseId: 'appIV66Ptd58pPiXf',
+        tableId: 'tblWsovNTzR0wAdOs',
         records: [],
         currentRecordIndex: 0,
         record: null,
         displayTimer: null,
         refreshTimer: null,
-
-
-        init() {
-            this.tokenModal = new bootstrap.Modal('#token-modal')
-            this.tokenModal.show();
-        },
+        delay: 1000,
 
         setToken() {
-            this.tokenModal.hide();
             this.token = this.tempToken;
             this.fetchData();
             this.setDisplayTimer();
             this.setRefreshTimer();
         },
+        getUrl() {
+            return `https://api.airtable.com/v0/${this.baseId}/${this.tableId}`;
+        },
 
         fetchData() {
             if (!this.token) return;
 
-            fetch('https://api.airtable.com/v0/appF1asllEQjuOvcm/tblM7Yv7cNRGAOc1H', {
+            fetch(this.getUrl(), {
                     headers: {
                         'Authorization': `Bearer ${this.token}`
                     }
@@ -149,11 +57,11 @@ function airtableDataFetcher() {
 
         setDisplayTimer() {
             clearInterval(this.displayTimer);
-            this.displayTimer = setInterval(() => this.nextRecord(), 30 * 1000);
+            this.displayTimer = setInterval(() => this.nextRecord(), this.delay * 1000);
         },
 
         nextRecord() {
-            this.currentRecordIndex = (this.currentRecordIndex + 1) % this.records.length;
+            this.currentRecordIndex = (this.currentRecordIndex + 1) % (this.records.length);
             this.updateRecord();
         },
 
@@ -164,6 +72,80 @@ function airtableDataFetcher() {
     }
 }
 </script>
+
+
+<div x-data="airtableDataFetcher()" x-init="fetchData()">
+      
+
+    <div x-show="!token" class="modal fade" id="token-modal" aria-hidden="true">
+        <div class="modal-dialog p-2">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Airtable access token</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" x-model="tempToken" placeholder="Saisissez votre Access Token" class="border border-gray-300 p-2">
+                    <button @click="setToken" class="bg-gray-600 text-white p-2 px-4 rounded-md ms-2">GO</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <template x-if="record">
+        <div class="flex flex-row justify-stretch align-items-center h-screen">
+            <div class="basis-1/2 relative bg-gray-200">
+                <template x-if="record.fields['photo']">
+                    <img  
+                        x-bind:src="record.fields['photo'][0].url"
+                        class="absolute inset-0 w-full h-full object-cover"
+                        alt="Photo"
+                    >
+                </template>
+            </div>
+            <div class="basis-1/2 m-6 text-2xl">
+                <h1 class="font-extrabold" x-text="record.fields['name']"></h1>
+                <p x-text="record.fields['bio']" class="mt-5"></p>
+
+                <!--- EMAIL et PHONE -->
+                <div x-show="record.fields['email']" class="flex items-center mt-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 block">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 1 0-2.636 6.364M16.5 12V8.25" />
+                    </svg>
+                    <div x-text="record.fields['email']" class="ms-1"></div>
+                </div>
+                <div x-show="record.fields['phone']"  class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+                    </svg>
+                    <div x-text="record.fields['phone']" class="ms-1"></div>
+                </div>
+                
+                <!--- Présence -->
+                <div x-show="record.fields['days']"  class="flex items-center mt-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 block">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 2.994v2.25m10.5-2.25v2.25m-14.252 13.5V7.491a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v11.251m-18 0a2.25 2.25 0 0 0 2.25 2.25h13.5a2.25 2.25 0 0 0 2.25-2.25m-18 0v-7.5a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v7.5m-6.75-6h2.25m-9 2.25h4.5m.002-2.25h.005v.006H12v-.006Zm-.001 4.5h.006v.006h-.006v-.005Zm-2.25.001h.005v.006H9.75v-.006Zm-2.25 0h.005v.005h-.006v-.005Zm6.75-2.247h.005v.005h-.005v-.005Zm0 2.247h.006v.006h-.006v-.006Zm2.25-2.248h.006V15H16.5v-.005Z" />
+                    </svg>
+                    <div x-text="record.fields['days']" class="ms-1"></div>
+                </div>
+                  
+                <!-- suivant -->
+                <button 
+                    @click="nextRecord()" 
+                    class="fixed right-2 top-1/2 transform -translate-y-1/2 border border-gray-800 rounded-md opacity-10 bg-gray-50 hover:opacity-100 shadow-lg z-50"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8">
+                        <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </template>
+
+</div>
+
+
+
 
 </body>
 </html>
