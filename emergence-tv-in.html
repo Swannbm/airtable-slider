@@ -13,8 +13,7 @@
 function airtableDataFetcher() {
 
     return {
-        tempToken: 'pat8LIiAm2zYF1sGD.72d982b2971b9ab0e61b65d49866a8f51902c84876d81061a80f6efe317e1a9f',
-        token: null,
+        token: '',
         baseId: 'appIV66Ptd58pPiXf',
         tableId: 'tblWsovNTzR0wAdOs',
         records: [],
@@ -22,10 +21,9 @@ function airtableDataFetcher() {
         record: null,
         displayTimer: null,
         refreshTimer: null,
-        delay: 1000,
+        delay: 30,
 
         setToken() {
-            this.token = this.tempToken;
             this.fetchData();
             this.setDisplayTimer();
             this.setRefreshTimer();
@@ -74,19 +72,22 @@ function airtableDataFetcher() {
 </script>
 
 
-<div x-data="airtableDataFetcher()" x-init="fetchData()">
+<div x-data="airtableDataFetcher()">
       
 
-    <div x-show="!token" class="modal fade" id="token-modal" aria-hidden="true">
+    <div x-show="!record" class="modal fade" id="token-modal" aria-hidden="true">
         <div class="modal-dialog p-2">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Airtable access token</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <input type="text" x-model="tempToken" placeholder="Saisissez votre Access Token" class="border border-gray-300 p-2">
-                    <button @click="setToken" class="bg-gray-600 text-white p-2 px-4 rounded-md ms-2">GO</button>
+                <div class="flex flex-col gap-1">
+                    <input type="text" x-model="token" placeholder="Saisissez votre Access Token" class="border border-gray-300 p-2 block">
+                    <input type="text" x-model="baseId" class="border border-gray-300 p-2 block">
+                    <input type="text" x-model="tableId" class="border border-gray-300 p-2 block">
+                    <input type="text" x-model="delay" class="border border-gray-300 p-2 block">
+                    <button @click="setToken" class="bg-gray-600 text-white p-2 px-4 rounded-md block">GO</button>
                 </div>
             </div>
         </div>
