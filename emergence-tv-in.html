@@ -73,7 +73,6 @@ function airtableDataFetcher() {
 
 
 <div x-data="airtableDataFetcher()">
-      
 
     <div x-show="!record" class="modal fade" id="token-modal" aria-hidden="true">
         <div class="modal-dialog p-2">
@@ -106,10 +105,12 @@ function airtableDataFetcher() {
             </div>
             <div class="basis-1/2 m-6">
                 <h1 class="font-extrabold text-6xl" x-text="record.fields['name']"></h1>
-                <p x-html="record.fields['bio']" class="mt-5 text-4xl"></p>
+
+                <!--- Bio -->
+                <p x-html="record.fields['bio']" class="mt-8 text-4xl"></p>
 
                 <!--- EMAIL et PHONE -->
-                <div x-show="record.fields['email']" class="flex items-center mt-5">
+                <div x-show="record.fields['email']" class="flex items-center mt-8">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 block">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 1 0-2.636 6.364M16.5 12V8.25" />
                     </svg>
@@ -123,7 +124,7 @@ function airtableDataFetcher() {
                 </div>
                 
                 <!--- Présence -->
-                <div x-show="record.fields['days']"  class="flex items-center mt-5">
+                <div x-show="record.fields['days']"  class="flex items-center mt-8">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 block">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 2.994v2.25m10.5-2.25v2.25m-14.252 13.5V7.491a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v11.251m-18 0a2.25 2.25 0 0 0 2.25 2.25h13.5a2.25 2.25 0 0 0 2.25-2.25m-18 0v-7.5a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v7.5m-6.75-6h2.25m-9 2.25h4.5m.002-2.25h.005v.006H12v-.006Zm-.001 4.5h.006v.006h-.006v-.005Zm-2.25.001h.005v.006H9.75v-.006Zm-2.25 0h.005v.005h-.006v-.005Zm6.75-2.247h.005v.005h-.005v-.005Zm0 2.247h.006v.006h-.006v-.006Zm2.25-2.248h.006V15H16.5v-.005Z" />
                     </svg>
